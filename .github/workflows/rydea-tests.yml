@@ -1,0 +1,34 @@
+name: Rydea mobility core tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/rydea/core.js'
+      - 'test/core.test.js'
+      - '.github/workflows/rydea-tests.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/rydea/core.js'
+      - 'test/core.test.js'
+      - '.github/workflows/rydea-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobility-core:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Run mobility core tests
+        run: node --test test/core.test.js
